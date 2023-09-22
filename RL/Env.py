@@ -5,7 +5,9 @@
 # LICENSE file in the root directory of this source tree. 
 
 import gym
+# import gymnasium as gym
 from gym import spaces
+from gym.utils import seeding
 import time
 from datetime import datetime
 from icecream import ic #for debugging
@@ -113,6 +115,11 @@ class ABCEnv(gym.Env):
         if self.print_all:
             print("Finish initialization ")
 
+
+    # def seed(self, seed=None):
+    #     self.np_random, seed = seeding.np_random(seed)
+    #     return [seed]
+    
     def reset(self):
         """
         Important: the observation must be a numpy array

@@ -5,11 +5,13 @@
 # LICENSE file in the root directory of this source tree. 
 from Env import ABCEnv
 import gym 
+# import gymnasium as gym
 import numpy as np
+import time
 import torch
 torch.use_deterministic_algorithms(True)
 
-from stable_baselines3 import PPO
+from stable_baselines3 import PPO,A2C
 from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.evaluation import evaluate_policy
 from stable_baselines3.common.vec_env import SubprocVecEnv
@@ -47,12 +49,15 @@ def ReplaceYAML(file_path,replacement_line,line_number):
         file.close()
 
 if __name__ == '__main__':
+    start_time = time.time()
+
     # Create the vectorized environment
     env = SubprocVecEnv([make_env(i,Experiment_Seed) for i in range(num_cpu)])
 
     # Train the agent
     total_timesteps = 5000 + 400
     #Pick RL algorithms A2C, PPO etc.
+    os.environ['CUBLAS_WORKSPACE_CONFIG']=':16:8'
     model = A2C('MlpPolicy', env, verbose=1, tensorboard_log="./tensorboard/",learning_rate=EXP_LR)
     model.learn(total_timesteps)
     
@@ -61,9 +66,15 @@ if __name__ == '__main__':
     
     model.load(model_name, env=env)
     
+    print("evaluate!!!!")
     #evaluate policy
     mean_reward, std_reward = evaluate_policy(model, model.get_env(), n_eval_episodes = 5)
     print("Evaluated Policy Performance for circuit performance is")
     print("mean_reward is: ", mean_reward)
     print("std_reward is: ", std_reward)
+    end_time = time.time()
+    elasped_time_seconds = end_time - start_time
+    elasped_time_minutes = elasped_time_seconds / 60
+
+    print(f"Total time elapsed: {elasped_time_minutes} minutes")
 

@@ -10,12 +10,11 @@
 # environment to train the RL agent. 
 
 # change this to the abc binary path if the command is not recognized system-wide
-abc_binary: /home/path/to/abc
-ccirc_binary: /home/path/to/ccirc/ccirc
+abc_binary: yosys-abc
+ccirc_binary: /data/fzliu/RL4LS/ccirc/ccirc
 
 # path of the design file in one of the accepted formats by ABC
-design_file: /home/path/to/benchmarks/sin.v
-
+design_file: /data/fzliu/EPFL_benchmarks/random_control/mem_ctrl.v
 # FPGA mapping - exlusive with the above
 fpga_mapping:
   lut_inputs: 6
@@ -34,6 +33,6 @@ optimizations:
 playground_dir: playground
 
 # agent training parameters
-episodes: 100
+episodes: 200
 iterations: 25
-model_dir: /tmp/brain/model.ckpt   # must be absolute path
+model_dir: /data/fzliu/RL4LS/ckpt/model.ckpt   # must be absolute path
